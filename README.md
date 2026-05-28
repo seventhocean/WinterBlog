@@ -164,7 +164,7 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       JWT_SECRET: ${JWT_SECRET}
     ports:
-      - "8080:8080"
+      - "127.0.0.1:8080:8080"
     volumes:
       - /srv/flecblog:/app/data
     networks:
@@ -177,7 +177,7 @@ services:
     environment:
       NUXT_PUBLIC_API_URL: ${API_URL}
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     networks:
       - flec-network
     depends_on:
@@ -190,7 +190,7 @@ services:
     environment:
       API_URL: ${API_URL}
     ports:
-      - "4000:4000"
+      - "127.0.0.1:4000:4000"
     networks:
       - flec-network
     depends_on:
@@ -236,7 +236,7 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       JWT_SECRET: ${JWT_SECRET}
     ports:
-      - "8080:8080"
+      - "127.0.0.1:8080:8080"
     volumes:
       - /srv/flecblog:/app/data
     networks:
@@ -252,7 +252,7 @@ services:
     environment:
       NUXT_PUBLIC_API_URL: ${API_URL}
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
     networks:
       - flec-network
     depends_on:
@@ -265,7 +265,7 @@ services:
     environment:
       API_URL: ${API_URL}
     ports:
-      - "4000:4000"
+      - "127.0.0.1:4000:4000"
     networks:
       - flec-network
     depends_on:
@@ -286,6 +286,43 @@ volumes:
 ```bash
 docker-compose up -d
 ```
+
+### Nginx + SSL 生产部署
+
+适合使用域名 + HTTPS 的生产环境部署。
+
+**架构**：系统 Nginx 作为反向代理，Certbot 申请 Let's Encrypt 证书，Docker 容器仅绑定 `127.0.0.1`。
+
+**步骤：**
+
+1. **申请 SSL 证书**（以 `winterwait.com` 为例）：
+   ```bash
+   # 主域名
+   sudo certbot certonly --webroot --webroot-path /var/www/certbot \
+     -d winterwait.com -d www.winterwait.com
+   # 子域名
+   sudo certbot certonly --webroot --webroot-path /var/www/certbot \
+     -d admin.winterwait.com -d api.winterwait.com
+   ```
+
+2. **配置 Nginx**（`/etc/nginx/sites-available/your-domain.conf`）：
+   - 三个 server 块分别代理 `winterwait.com`（Blog :3000）、`admin.winterwait.com`（Admin :4000）、`api.winterwait.com`（Server :8080）
+   - `proxy_pass` 指向 `127.0.0.1:对应端口`
+   - SSL 证书路径指向 `/etc/letsencrypt/live/域名/fullchain.pem`
+
+3. **启动 Docker 容器**：
+   ```bash
+   docker compose up -d
+   ```
+
+4. **设置证书自动续期**：
+   ```bash
+   # 添加 cron 任务：每周检查并续期
+   sudo crontab -e
+   # 添加: 0 3 * * 1 certbot renew --quiet --webroot --webroot-path /var/www/certbot && systemctl reload nginx
+   ```
+
+**Cloudflare CDN 环境**：Nginx 需加载 Cloudflare IP 段配置（`cloudflare-realip.conf`），使用 `CF-Connecting-IP` 获取真实客户端 IP。Cloudflare SSL 模式建议设为 **Full (Strict)**。
 
 ### 访问地址
 
