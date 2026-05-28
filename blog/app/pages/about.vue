@@ -175,7 +175,7 @@ const formatWords = (words: string) => {
         <div class="title" :style="{ color: info.personality.color }">
           {{ info.personality.type }}
         </div>
-        <NuxtImg class="image" :src="info.personality.image" alt="性格类型" loading="lazy" />
+        <img class="image" :src="info.personality.image" alt="性格类型" loading="lazy" />
         <div class="tips-bottom">
           在
           <a href="https://www.16personalities.com/ch" target="_blank">16Personalities</a>
