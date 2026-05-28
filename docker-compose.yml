@@ -21,6 +21,8 @@ services:
     image: talen8/flec-server:latest
     container_name: flec_server
     restart: unless-stopped
+    ports:
+      - "127.0.0.1:8080:8080"
     environment:
       DB_HOST: postgres
       DB_PORT: 5432
@@ -28,8 +30,6 @@ services:
       DB_USER: postgres
       DB_PASSWORD: ${DB_PASSWORD}
       JWT_SECRET: ${JWT_SECRET}
-    ports:
-      - "8080:8080"
     volumes:
       - /srv/flecblog:/app/data
     networks:
@@ -42,10 +42,10 @@ services:
     image: talen8/flec-blog:latest
     container_name: flec_blog
     restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
     environment:
       NUXT_PUBLIC_API_URL: ${API_URL}
-    ports:
-      - "3000:3000"
     networks:
       - flec-network
     depends_on:
@@ -55,10 +55,10 @@ services:
     image: talen8/flec-admin:latest
     container_name: flec_admin
     restart: unless-stopped
+    ports:
+      - "127.0.0.1:4000:4000"
     environment:
       API_URL: ${API_URL}
-    ports:
-      - "4000:4000"
     networks:
       - flec-network
     depends_on:
