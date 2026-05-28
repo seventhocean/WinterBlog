@@ -39,7 +39,7 @@ services:
         condition: service_healthy
 
   blog:
-    image: talen8/flec-blog:latest
+    image: flec-blog:local
     container_name: flec_blog
     restart: unless-stopped
     ports:
