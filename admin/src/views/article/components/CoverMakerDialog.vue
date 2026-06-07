@@ -107,7 +107,7 @@
                   <p>上传图片开始创作</p>
                 </div>
                 <div v-else class="image-canvas" ref="canvasRef" :style="canvasStyle">
-                  <img :src="imageUrl" alt="" class="base-image" />
+                  <img :src="imageUrl" alt="" class="base-image" crossorigin="anonymous" />
                   <div class="image-overlay" :style="{ opacity: overlayOpacity / 100 }"></div>
                   <div v-if="isDragging" class="guide-lines">
                     <div class="guide-line vertical-center"></div>
@@ -143,7 +143,7 @@
                     :style="getAvatarStyle()"
                     @mousedown="startDragElement('avatar', $event)"
                   >
-                    <img :src="textElements.avatar.src" :style="getAvatarImageStyle()" />
+                    <img :src="textElements.avatar.src" :style="getAvatarImageStyle()" crossorigin="anonymous" />
                   </div>
                 </div>
               </div>
@@ -260,7 +260,7 @@ const textElements = ref({
     text: '',
     x: 50,
     y: 40,
-    fontSize: 148,
+    fontSize: 120,
     fontFamily: 'SlidefontKBK',
     color: '#ffffff',
   } as TextElement,
