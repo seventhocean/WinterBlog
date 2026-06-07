@@ -655,7 +655,7 @@ async function generateImageDataUrl() {
         ctx.stroke();
       }
     }
-    return canvas.toDataURL('image/png', 0.95);
+    return canvas.toDataURL('image/jpeg', 0.92);
   } catch (_error) {
     ElMessage.error('生成图片失败');
     return null;
@@ -675,13 +675,13 @@ const handleExportCommand = async (command: 'apply' | 'apply-export' | 'export-o
     ElMessage.success('封面已应用到文章');
     const link = document.createElement('a');
     link.href = dataUrl;
-    link.download = `cover-${Date.now()}.png`;
+    link.download = `cover-\${Date.now()}.jpg`;
     link.click();
     ElMessage.success('图片已导出');
   } else if (command === 'export-only') {
     const link = document.createElement('a');
     link.href = dataUrl;
-    link.download = `cover-${Date.now()}.png`;
+    link.download = `cover-\${Date.now()}.jpg`;
     link.click();
     ElMessage.success('图片已导出');
   }
