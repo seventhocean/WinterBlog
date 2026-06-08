@@ -151,9 +151,12 @@ export default defineNuxtPlugin({
           oldContainer.remove();
         }
 
+        // 用 Range.createContextualFragment 替代 innerHTML，使 script 可执行
+        const fragment = document.createRange().createContextualFragment(bodyCode);
+
         const container = document.createElement('div');
         container.id = 'custom-body-inject';
-        container.innerHTML = bodyCode;
+        container.appendChild(fragment);
         document.body.prepend(container);
       }
     };
