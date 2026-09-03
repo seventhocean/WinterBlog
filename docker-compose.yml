@@ -7,8 +7,10 @@ services:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${DB_PASSWORD}
+      TZ: Asia/Shanghai
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - /etc/localtime:/etc/localtime:ro
     networks:
       - flec-network
     healthcheck:
@@ -29,10 +31,12 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       JWT_SECRET: ${JWT_SECRET}
       API_URL: ${API_URL}
+      TZ: Asia/Shanghai
     ports:
-      - "8080:8080"
+      - "127.0.0.1:8080:8080"
     volumes:
       - /srv/flecblog:/app/data
+      - /etc/localtime:/etc/localtime:ro
     networks:
       - flec-network
     depends_on:
@@ -45,8 +49,11 @@ services:
     restart: unless-stopped
     environment:
       NUXT_PUBLIC_API_URL: ${API_URL}
+      TZ: Asia/Shanghai
     ports:
-      - "3000:3000"
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
     networks:
       - flec-network
     depends_on:
@@ -58,8 +65,11 @@ services:
     restart: unless-stopped
     environment:
       API_URL: ${API_URL}
+      TZ: Asia/Shanghai
     ports:
-      - "4000:4000"
+      - "127.0.0.1:4000:4000"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
     networks:
       - flec-network
     depends_on:
